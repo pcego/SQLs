@@ -1,0 +1,37 @@
+create procedure addproduto(@codproduto int, @codcompra int, @quant int) as
+	
+	declare @estoque int;
+	
+	set @estoque = (select estoque from produtos where codigo = @codproduto);
+	
+	insert into itenscompra(compra,produto,quant) values(@codcompra,@codproduto,@quant)
+	
+	update produtos set estoque = @estoque + @quant,
+	where codigo = @codproduto
+
+
+
+
+
+
+create procedure vendaproduto(@codvenda int, @codproduto int, @quant int) as
+
+	declare @estoque int;
+	set @estoque = (select estoque from produtos where codigo = @codproduto);
+	
+	if(@estoque>=@quant)
+		begin
+		insert into itensvenda(venda,produto,quant) values(@codvenda,@codproduto,@quant);
+		update produtos set estoque = @estoque - @quant 
+		where codigo = @codproduto;
+		
+		select 1;
+		end
+
+		else
+		
+		begin
+		select 0;
+
+		end
+		
