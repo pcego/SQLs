@@ -6,3 +6,12 @@ CREATE TABLE produtos(
  estoque int not null,
  primary key (cod)
 )
+
+CREATE TABLE fornecedores(
+ cod int identity(1,1),
+ nome varchar(60) not null,
+ cnpj varchar(18) not null unique,
+ primary key (cod)
+ )
+
+CREATE INDEX ixcnpj ON fornecedores (cnpj);
