@@ -1,1 +1,8 @@
 CREATE DATABASE controleestoque;
+
+CREATE TABLE produtos(
+ cod int identity(1,1),
+ descricao varchar(255) not null,
+ estoque int not null,
+ primary key (cod)
+)
