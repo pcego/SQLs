@@ -29,4 +29,7 @@ create procedure vendaproduto(@codvenda int, @codproduto int, @quant int) as
 			select 0;
 
 		end
-		
+
+
+
+	
