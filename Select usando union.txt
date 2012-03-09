@@ -1,0 +1,16 @@
+select datepart(m,datas.data) as mes, p.descricao as produto,
+
+(select SUM(quantidade) from itensvendas iv join vendas v
+on iv.venda=v.codigo where v.produto=p.codigo and DATEPART(M,v.data)=DATEPART(M,Datas.data)) as
+qtdvendas,
+
+(select SUM(quantidade) from itenscompras ic join compras c on ic.compra=c.codigo
+where c.produto=p.codigo and DATEPART(M,c.data)=DATEPART(M,Datas.data)) as qtdcompras
+
+from produtos p join((select data,produto from itensvendas iv join vendas v on
+iv.vendas=v.codigo)
+
+union
+
+(select data,produto from itenscompra ic join compras c on ic.compra=c.compra)) as datas
+on datas produto=p.codigo
