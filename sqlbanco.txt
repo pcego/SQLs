@@ -64,4 +64,5 @@ from produtos p join ((select data, produtos from itensVendas iv join vendas v O
 							where c.produto = p.codigo and DATEPART (m, c.data) = DATEPART (m, Datas.data) ) as QtdCompras
 							
 							
- 
+
+teste kennedi 
