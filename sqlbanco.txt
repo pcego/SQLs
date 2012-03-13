@@ -13,6 +13,7 @@ CREATE TABLE produtos(
  cod int identity(1,1),
  descricao varchar(255) not null,
  estoque int not null,
+ valorunitario decimal (4,2) not null,
  primary key (cod)
 )
 
@@ -28,41 +29,52 @@ CREATE TABLE fornecedores(
 CREATE INDEX ixnome ON fornecedores (nome);
 
 
-CREATE TABLE compra (
+CREATE TABLE compras (
  cod int identity(1,1),
  fornecedor int not null,
  data date,
  primary key (cod),
- foreign key (fornecedor) references fornecedores (cod)
+ foreign key (fornecedor) 
+	references fornecedores (cod)
 ) 
- 
-CREATE INDEX ixdata ON compra (data)
+
+CREATE INDEX ixdata ON compras (data)
 
 CREATE TABLE vendas (
  cod int identity(1,1),
  cliente int not null,
  data date,
- primary key (cod)
+ primary key (cod),
+ foreign key (cliente)
+	references clientes (cod)
 )
+
 
 CREATE INDEX ixdata ON vendas (data)
 
 
-faltando algumas coisas....
- 
- lista data / produto / quantidade venda / quantidade compra
- 
-from produtos p join ((select data, produtos from itensVendas iv join vendas v ON iv.vendas=v.codigo)
-					UNION
-					  (select data, produtos from ItensCompra ic join compra c ON ic.compra = c.codigo) ) as
-					  ON Datas produto = p.codigo
-					  
-					  select DATEPART(m,Datas.data) as Mes, p.descricao as Produto,
-					  ( select SUM (quantidade) from ItensVendas iv join venda v ON iv.venda = v.codigo
-						where v.produto = p.codigo and DATEPART (m,v.data) = DATEPART (m,Datas.data) ) as QtdVendas, 
-						( select SUM (quantidade) from ItensVendas ic join Compras c ON ic.compra = c.codigo
-							where c.produto = p.codigo and DATEPART (m, c.data) = DATEPART (m, Datas.data) ) as QtdCompras
-							
-							
+CREATE TABLE itensCompras (
+	cod int identity(1,1),
+	compra int not null,
+	produto int not null,
+	quantidade int not null,
+	valorunitario decimal (4,2) not null,
+	primary key (cod),
+	foreign key (compra) 
+		references compras (cod),
+	foreign key (produto)
+		references produtos (cod)
+)
 
-teste kennedi 
+CREATE TABLE itensVendas (
+	cod int identity(1,1),
+	venda int not null,
+	produto int not null,
+	quantidade int not null,
+	valorunitario decimal (4,2) not null,
+	primary key (cod),
+	foreign key (venda) 
+		references vendas (cod),
+	foreign key (produto)
+		references produtos (cod)
+) 
